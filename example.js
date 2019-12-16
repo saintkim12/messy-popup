@@ -1,3 +1,7 @@
+// Build With ES6
+// import MessyPopup from './messy-popup'
+// CommonJS
+// var MessyPopup = require('./messy-popup')
 
 MessyPopup.config({
   // wrapper: `
@@ -32,7 +36,7 @@ MessyPopup.createPopup({
   id: 'test02',
   style: {
     right: '200px',
-    top: '300px',
+    top: '350px',
     width: '400px'
   },
   draggable: true,
