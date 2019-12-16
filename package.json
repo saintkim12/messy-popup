@@ -1,0 +1,25 @@
+{
+  "name": "messy-popup",
+  "version": "0.0.1",
+  "description": "",
+  "main": "messy-popup.js",
+  "dependencies": {},
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  },
+  "scripts": {
+    "build": "parcel build src/messy-popup.js -d ./build --global MessyPopup",
+    "serve": "parcel serve example/example.build.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saintkim12/messy-popup.git"
+  },
+  "author": "saintkim12",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saintkim12/messy-popup/issues"
+  },
+  "homepage": "https://github.com/saintkim12/messy-popup#readme"
+}

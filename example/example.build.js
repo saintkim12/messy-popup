@@ -1,7 +1,7 @@
 // Build With ES6
 // import MessyPopup from './messy-popup'
 // CommonJS
-// var MessyPopup = require('./messy-popup')
+var MessyPopup = require('../src/messy-popup')
 
 MessyPopup.config({
   // wrapper: `
