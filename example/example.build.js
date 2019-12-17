@@ -31,7 +31,7 @@ MessyPopup.createPopup({
     top: '50px',
   },
   draggable: true,
-  content: '<img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" />'
+  content: '<img src="./Octocat.png" />'
 }, {
   id: 'test02',
   style: {
@@ -40,5 +40,5 @@ MessyPopup.createPopup({
     width: '400px'
   },
   draggable: true,
-  content: '<img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" />'
+  content: '<img src="./Octocat.png" />'
 })

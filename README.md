@@ -1,5 +1,5 @@
 # messy-popup
-메인 사이트에 팝업을 덕지덕지 붙여야 할 때 도움이 되는 라이브러리입니다.
+페이지(ex.메인)에 팝업을 덕지덕지 붙여야 할 때 도움이 되는 라이브러리입니다.
 
 ## Get Started
 ### Using CDN
@@ -16,8 +16,26 @@
     content: '<div>Hello!</div>'
   })
 ```
-### Using AMD(like requirejs)
+### Using with requirejs
+```js
+require(['cdn//messy-popup.js'], function(MessyPopup) {
+  MessyPopup.config({
+    // common, global config
+  })
+  MessyPopup.createPopup({
+    id: 'messy01',
+    content: '<div>Hello!</div>'
+  })
+})
+```
 ### Using module(like webpack, parcel, ...)
+```js
+// ES6 import
+import MessyPopup from 'messy-popup'
+// or
+// CommonJS
+var MessyPopup = require('../src/messy-popup')
+```
 
 ## API
 ### MessyPopup 
