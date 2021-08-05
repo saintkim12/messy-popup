@@ -10,7 +10,7 @@
   <!-- UMD example -->
   <script src="../build/messy-popup.js"></script>
   <script>
-    MessyPopup.config({
+    MessyPopup.setConfig({
       // wrapper: `
       //   <div>
       //     <div data-messy-content></div>
@@ -24,7 +24,7 @@
       id: 'test01',
       wrapper: `
         <div>
-          <div data-messy-draggable-handle>
+          <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->
             <h2>headerheader</h2>
           </div>
           <div data-messy-content></div>
@@ -38,13 +38,13 @@
         top: '50px',
       },
       draggable: true,
-      content: '<img src="./Octocat.png" />'
+      content: '<img src="//via.placeholder.com/350x150" />'
     }, {
       id: 'test02',
       style: {
         right: '200px',
         top: '350px',
-        width: '400px'
+        width: '200px'
       },
       draggable: true,
       content: '<img src="./Octocat.png" />'

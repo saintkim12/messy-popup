@@ -1,9 +1,9 @@
 // Build With ES6
 // import MessyPopup from './messy-popup'
 // CommonJS
-var MessyPopup = require('../src/messy-popup')
+var MessyPopup = require('../build/messy-popup')
 
-MessyPopup.config({
+MessyPopup.setConfig({
   // wrapper: `
   //   <div>
   //     <div data-messy-content></div>

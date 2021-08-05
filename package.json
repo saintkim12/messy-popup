@@ -4,10 +4,12 @@
   "description": "",
   "main": "messy-popup.js",
   "devDependencies": {
-    "parcel-bundler": "^1.9.4"
+    "@types/node": "^16.4.12",
+    "parcel-bundler": "^1.9.4",
+    "typescript": "^4.3.5"
   },
   "scripts": {
-    "build": "parcel build src/messy-popup.js -d ./build --global MessyPopup",
+    "build": "parcel build src/messy-popup.ts -d ./build --global MessyPopup",
     "serve": "parcel serve example/example.build.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

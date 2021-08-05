@@ -1,5 +1,5 @@
 ((document: Document | null): void => {
-  if (document as null) {
+  if (!document) {
     // if not browser
     return
   }
@@ -88,34 +88,21 @@
   cssList.forEach(insertCss)
 
   // draggable 속성 해제
-  const unbindDraggable = function (elmnt: HTMLElement | null): void {
-    if (elmnt as null) return
-    const handleElement: HTMLElement | null = elmnt.querySelector('[' + dataDraggableHandle + ']')
-    if (handleElement as HTMLElement) {
-      // if present, the header is where you move the DIV from:
-      handleElement.onmousedown = undefined
-    } else {
-      // otherwise, move the DIV from anywhere inside the DIV:
-      elmnt.onmousedown = undefined
-    }
+  const unbindDraggable = function (elmnt: HTMLElement): void {
+    const targetElement: HTMLElement = elmnt.querySelector('[' + dataDraggableHandle + ']') ?? elmnt
+    targetElement.onmousedown = undefined
   }
   // draggable 속성 연결
-  const bindDraggable = function (elmnt: HTMLElement | null): void {
-    if (elmnt as null) return
+  const bindDraggable = function (elmnt: HTMLElement): void {
 
     // from https://www.w3schools.com/howto/howto_js_draggable.asp
     let pos1 = 0
     let pos2 = 0
     let pos3 = 0
     let pos4 = 0
-    const handleElement: HTMLElement | null = elmnt.querySelector('[' + dataDraggableHandle + ']')
-    if (handleElement as HTMLElement) {
-      // if present, the header is where you move the DIV from:
-      handleElement.onmousedown = dragMouseDown
-    } else {
-      // otherwise, move the DIV from anywhere inside the DIV:
-      elmnt.onmousedown = dragMouseDown
-    }
+    
+    const targetElement: HTMLElement = elmnt.querySelector('[' + dataDraggableHandle + ']') ?? elmnt
+    targetElement.onmousedown = dragMouseDown
 
     function dragMouseDown(e: MouseEvent): void {
       // e = e || window.event;
@@ -183,12 +170,12 @@
     removePopupInfo(id)
     return el.parentNode.removeChild(el)
   }
-  const setDraggable = function (id: string, unset?: boolean): MessyPopupHTMLElement {
-    const set = unset !== false
+  const setDraggable = function (id: string, set?: boolean): MessyPopupHTMLElement {
+    const unset = set === false
     const el = popupInfo[id]
     // if (set) unbindDraggable.call(el)
     // else bindDraggable.call(el)
-    set ? unbindDraggable.call(el, el) : bindDraggable.call(el, el)
+    unset ? unbindDraggable.call(el, el) : bindDraggable.call(el, el)
     return el
   }
 
@@ -258,9 +245,13 @@
           div.id = id
           div.classList.add(globalWrapperClassName)
 
-          const contentDiv: Element = div.querySelector(`[${contentAttrName}]`) || div
+          const contentDiv: Element = div.querySelector(`[${contentAttrName}]`) ?? (() => {
+            div.setAttribute(contentAttrName, '') /* wrapper 자신을 contentDiv로 지정 */
+            return div
+          })()
           contentDiv.innerHTML = content
           div.dataset[aname] = ''
+          console.log('style', style)
           // div.dataset[aname + 'Id'] = id
           div.style.top = style?.top?.toString() || ''
           div.style.left = style?.left?.toString() || ''
@@ -299,18 +290,17 @@
           }
           const draggable: boolean = getBooleanFunctionalValue(item.draggable, config.global.draggable)
           const show: boolean = (() => {
-            // 우선도에 따른 조회값에 따라 리턴
+            // 우선도에 따른 조회값(item.show, global.show, !item.hide, !global.hide, true)에 따라 리턴
             return getBooleanFunctionalValue(
               item.show,
               () => ([true, false].includes(item.hide) ? !item.hide : undefined),
               config.global.show,
               () => ([true, false].includes(config.global.hide) ? !config.global.hide : undefined),
-              false
+              true
             )
           })()
 
           body.appendChild(popup)
-
           if (draggable) popup.setDraggable()
           if (show) popup.show()
           return popup
@@ -378,7 +368,7 @@
   } else {
     // module.exports bind
     module.exports = MessyPopup
-    module.exports.default = MessyPopup
+    // module.exports.default = MessyPopup
   }
 })(
   ((): Document | null => {
