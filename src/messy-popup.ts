@@ -2,7 +2,6 @@ import { PopupConfig, DefaultPopupConfig, OptionalDefaultPopupConfig } from './t
 import { PopupHTMLElement } from './types/PopupElement';
 import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
 
-
 ;((document: Document | null): void => {
   if (!document) {
     // if not browser
@@ -136,12 +135,14 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
       }
     }
 
-    init(): void {
+    init(): this {
       const cssList = [
         `.${globalWrapperClassName} { background-color: #fff; }`,
         // `.${globalWrapperClassName} [data-messy-content] { height: 100%; }`,
       ]
       cssList.forEach(this.htmlUtil.insertCss)
+      
+      return this
     }
     
     addPopupInfo(id: string, el: PopupHTMLElement): void {
@@ -151,8 +152,8 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
       delete this.popupInfo[id]
     }
 
-    setConfig(customConfig: undefined): this
-    setConfig(customConfig: OptionalDefaultPopupConfig): this
+    // setConfig(customConfig: undefined): this
+    // setConfig(customConfig: OptionalDefaultPopupConfig): this
     setConfig(customConfig: OptionalDefaultPopupConfig): this {
       const getDefinedValue = <T>(...args: Array<T | undefined>): T | undefined => args.find((arg) => arg !== undefined)
       // const wrapObj = function(key, value) {
@@ -204,7 +205,7 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
           })()
           contentDiv.innerHTML = content
           div.dataset[aname] = ''
-          console.log('style', style)
+          // console.log('style', style)
           // div.dataset[aname + 'Id'] = id
           div.style.top = style?.top?.toString() || ''
           div.style.left = style?.left?.toString() || ''
@@ -315,8 +316,8 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
 
     
     // deprecated
-    config(customConfig: undefined): this
-    config(customConfig: OptionalDefaultPopupConfig): this
+    // config(customConfig: undefined): this
+    // config(customConfig: OptionalDefaultPopupConfig): this
     config(customConfig: OptionalDefaultPopupConfig): this {
       return this.setConfig(customConfig)
     }

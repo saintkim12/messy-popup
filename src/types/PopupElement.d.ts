@@ -1,5 +1,5 @@
 
-export interface PopupHTMLElement extends HTMLElement {
+export declare interface PopupHTMLElement extends HTMLElement {
   show: () => HTMLElement
   hide: () => HTMLElement
   destroy: () => HTMLElement

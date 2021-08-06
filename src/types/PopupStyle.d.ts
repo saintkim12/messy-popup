@@ -1,5 +1,5 @@
 
-export type PopupStyle = {
+export declare type PopupStyle = {
   top?: string | number
   left?: string | number
   bottom?: string | number

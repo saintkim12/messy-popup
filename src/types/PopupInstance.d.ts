@@ -1,15 +1,16 @@
 import { PopupConfig, DefaultPopupConfig, OptionalDefaultPopupConfig } from './PopupConfig'
 import { PopupHTMLElement } from './PopupElement'
 
-export type PopupDataInfo = {
+export declare type PopupDataInfo = {
   [id: string]: PopupHTMLElement
 }
 
-export interface PopupInstance {
+export declare interface PopupInstance {
   popupInfo: PopupDataInfo
   // _config: DefaultPopupConfig
   instanceConfig: DefaultPopupConfig
 
+  init(): this
   setConfig(customConfig: undefined): this
   setConfig(customConfig: OptionalDefaultPopupConfig): this
 

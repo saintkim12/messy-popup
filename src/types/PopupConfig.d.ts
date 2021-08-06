@@ -9,25 +9,25 @@ type CommonPopupConfig = {
 }
 
 // 팝업 디폴트 설정값
-export type DefaultPopupConfig = {
+export declare type DefaultPopupConfig = {
   root: string
   wrapper: HTMLElement
   global: DefaultPopupElementConfig
 }
 
 // 팝업 디폴트 엘리먼트 설정값
-export type DefaultPopupElementConfig = Partial<CommonPopupConfig> & {
+export declare type DefaultPopupElementConfig = Partial<CommonPopupConfig> & {
   // style.zIndex의 alias(설정시만 사용)
   zIndex?: string | number
 }
 
 // 팝업별 설정값
-export type PopupConfig = Partial<CommonPopupConfig> & {
+export declare type PopupConfig = Partial<CommonPopupConfig> & {
   id: string
   wrapper?: string
   content: string
 }
 
-export type OptionalDefaultPopupConfig = Partial<DefaultPopupConfig>
+export declare type OptionalDefaultPopupConfig = Partial<DefaultPopupConfig>
 
 export default PopupConfig
