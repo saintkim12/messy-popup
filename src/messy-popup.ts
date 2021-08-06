@@ -1,6 +1,7 @@
-import { PopupConfig, DefaultPopupConfig, OptionalDefaultPopupConfig } from './types/PopupConfig'
-import { PopupHTMLElement } from './types/PopupElement';
-import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
+/// <reference path="types/PopupConfig.ts" />
+/// <reference path="types/PopupElement.ts" />
+/// <reference path="types/PopupInstance.ts" />
+/// <reference path="types/PopupStyle.ts" />
 
 ;((document: Document | null): void => {
   if (!document) {
@@ -22,18 +23,18 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
       div.innerHTML = str
       return div.firstElementChild
     }
-    show(el: PopupHTMLElement): PopupHTMLElement {
+    show(el: Messi.PopupHTMLElement): Messi.PopupHTMLElement {
       el.style.visibility = ''
       return el
     }
-    hide(el: PopupHTMLElement): PopupHTMLElement {
+    hide(el: Messi.PopupHTMLElement): Messi.PopupHTMLElement {
       el.style.visibility = 'hidden'
       return el
     }
-    destroy(el: PopupHTMLElement): PopupHTMLElement {
+    destroy(el: Messi.PopupHTMLElement): Messi.PopupHTMLElement {
       return el.parentNode.removeChild(el)
     }
-    setDraggable(el: PopupHTMLElement, set?: boolean): PopupHTMLElement {
+    setDraggable(el: Messi.PopupHTMLElement, set?: boolean): Messi.PopupHTMLElement {
       const unset = set === false
       unset ? this.unbindDraggable.call(el, el) : this.bindDraggable.call(el, el)
       return el
@@ -112,10 +113,10 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
       }
     }
   }
-  class MessyPopupInstance implements PopupInstance {
-    public popupInfo: PopupDataInfo
-    private _config: DefaultPopupConfig
-    public instanceConfig: DefaultPopupConfig
+  class MessyPopupInstance implements Messi.PopupInstance {
+    public popupInfo: Messi.PopupDataInfo
+    private _config: Messi.DefaultPopupConfig
+    public instanceConfig: Messi.DefaultPopupConfig
     
     private htmlUtil: HTMLElementUtil
 
@@ -145,7 +146,7 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
       return this
     }
     
-    addPopupInfo(id: string, el: PopupHTMLElement): void {
+    addPopupInfo(id: string, el: Messi.PopupHTMLElement): void {
       this.popupInfo[id] = el
     }
     removePopupInfo(id: string): void {
@@ -154,7 +155,7 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
 
     // setConfig(customConfig: undefined): this
     // setConfig(customConfig: OptionalDefaultPopupConfig): this
-    setConfig(customConfig: OptionalDefaultPopupConfig): this {
+    setConfig(customConfig: Messi.OptionalDefaultPopupConfig): this {
       const getDefinedValue = <T>(...args: Array<T | undefined>): T | undefined => args.find((arg) => arg !== undefined)
       // const wrapObj = function(key, value) {
       //   var _o = {}
@@ -162,8 +163,8 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
       //   return _o
       // }
       // const wrapObj = (k: string, v: any): object => ({ [k]: v })
-      const defaultConfig: DefaultPopupConfig = this._config
-      const currentConfig: DefaultPopupConfig = {
+      const defaultConfig: Messi.DefaultPopupConfig = this._config
+      const currentConfig: Messi.DefaultPopupConfig = {
         root: getDefinedValue(customConfig?.root, defaultConfig.root),
         wrapper: getDefinedValue(customConfig?.wrapper, defaultConfig.wrapper),
         global: {
@@ -185,17 +186,17 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
       return this
     }
 
-    createPopup(...popupConfigList: Array<PopupConfig>): this {
-      const config: DefaultPopupConfig = this.instanceConfig
+    createPopup(...popupConfigList: Array<Messi.PopupConfig>): this {
+      const config: Messi.DefaultPopupConfig = this.instanceConfig
       const body: Element = document.querySelector(config.root)
 
       popupConfigList
         .filter((item) => item.id)
-        .map((item: PopupConfig): [PopupHTMLElement, PopupConfig] => {
+        .map((item: Messi.PopupConfig): [Messi.PopupHTMLElement, Messi.PopupConfig] => {
           const { id, wrapper, content, style = {} } = item
           const { zIndex: globalZIndex } = config.global
 
-          const div: PopupHTMLElement = <PopupHTMLElement>(wrapper === undefined ? config.wrapper : this.htmlUtil.convertTextToElement(wrapper)).cloneNode(true)
+          const div: Messi.PopupHTMLElement = <Messi.PopupHTMLElement>(wrapper === undefined ? config.wrapper : this.htmlUtil.convertTextToElement(wrapper)).cloneNode(true)
           div.id = id
           div.classList.add(globalWrapperClassName)
 
@@ -237,7 +238,7 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
           this.addPopupInfo(id, div)
           return [div, item]
         })
-        .map(([popup, item]: [PopupHTMLElement, PopupConfig]): PopupHTMLElement => {
+        .map(([popup, item]: [Messi.PopupHTMLElement, Messi.PopupConfig]): Messi.PopupHTMLElement => {
           const getBooleanFunctionalValue = (...args: Array<(() => boolean) | boolean>) => {
             for (const arg of args) {
               const value = typeof arg === 'function' ? arg() : arg
@@ -264,7 +265,7 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
         })
       return this
     }
-    getPopup(id: string): PopupHTMLElement {
+    getPopup(id: string): Messi.PopupHTMLElement {
       return this.popupInfo[id]
     }
     show(id: string): this {
@@ -303,8 +304,8 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
     getPopupCount(): number {
       return Object.keys(this.popupInfo).length
     }
-    forEach(fn: ([id, el]: [string, PopupHTMLElement], i: number, arr: Array<[string, PopupHTMLElement]>) => void): this {
-      Object.entries(this.popupInfo).forEach(function ([id, el]: [string, PopupHTMLElement], i: number, arr: Array<[string, PopupHTMLElement]>) {
+    forEach(fn: ([id, el]: [string, Messi.PopupHTMLElement], i: number, arr: Array<[string, Messi.PopupHTMLElement]>) => void): this {
+      Object.entries(this.popupInfo).forEach(function ([id, el]: [string, Messi.PopupHTMLElement], i: number, arr: Array<[string, Messi.PopupHTMLElement]>) {
         fn.apply(this, [el, id, i, arr])
       })
       return this
@@ -318,7 +319,7 @@ import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
     // deprecated
     // config(customConfig: undefined): this
     // config(customConfig: OptionalDefaultPopupConfig): this
-    config(customConfig: OptionalDefaultPopupConfig): this {
+    config(customConfig: Messi.OptionalDefaultPopupConfig): this {
       return this.setConfig(customConfig)
     }
   }
