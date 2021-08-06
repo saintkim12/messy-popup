@@ -1,62 +1,12 @@
-((document: Document | null): void => {
+import { PopupConfig, DefaultPopupConfig, OptionalDefaultPopupConfig } from './types/PopupConfig'
+import { PopupHTMLElement } from './types/PopupElement';
+import { PopupInstance, PopupDataInfo } from './types/PopupInstance';
+
+
+;((document: Document | null): void => {
   if (!document) {
     // if not browser
     return
-  }
-  type PopupDataInfo = {
-    [id: string]: MessyPopupHTMLElement
-  }
-  // type MessyPopupConfig = {
-  //   _config: MessyPopupDefaultConfig
-  //   config: Function
-  // }
-  type MessyPopupDefaultConfig = {
-    root: string
-    wrapper: HTMLElement
-    global: MessyPopupDefaultGlobalConfig
-  }
-  type OptionalMessyPopupDefaultConfig = Partial<MessyPopupDefaultConfig>
-  // & {
-  //   root?: string
-  //   wrapper?: HTMLElement
-  //   global?: MessyPopupDefaultGlobalConfig
-  // }
-  // 공통 팝업 설정과 팝업별 설정의 공통값
-  type MessyPopupOverlappedConfig = {
-    draggable: boolean
-    style: MessyPopupStyle
-    show: boolean
-    hide: boolean
-  }
-  type MessyPopupDefaultGlobalConfig = Partial<MessyPopupOverlappedConfig> & {
-    // style.zIndex의 alias(설정시만 사용)
-    zIndex?: string | number
-  }
-
-  type MessyPopupConfig = Partial<MessyPopupOverlappedConfig> & {
-    id: string
-    wrapper?: string
-    content: string
-  }
-
-  type MessyPopupStyle = {
-    top?: string | number
-    left?: string | number
-    bottom?: string | number
-    right?: string | number
-    position?: string
-    zIndex?: string | number
-
-    width?: string | number
-    height?: string | number
-  }
-
-  class MessyPopupHTMLElement extends HTMLElement {
-    show: () => HTMLElement
-    hide: () => HTMLElement
-    destroy: () => HTMLElement
-    setDraggable: () => HTMLElement
-    unsetDraggable: () => HTMLElement
   }
 
   //
@@ -65,127 +15,114 @@
   const aname = 'messyPopup'
   const dataDraggableHandle = 'data-messy-draggable-handle'
   const globalWrapperClassName = 'messy-popup'
-  const popupInfo: PopupDataInfo = {}
-
-  // CSS 삽입
-  const insertCss = (css: string): boolean => {
-    // 기존 sheet 사용
-    const sheet: CSSStyleSheet =
-      Array.from(document.styleSheets).find((sh) => sh.href === null) ||
-      (() => {
-        // 등록가능한 sheet가 없는 경우
-        const style = document.createElement('style')
-        style.setAttribute('data-messy-popup', 'true')
-        document.querySelector('head').appendChild(style)
-        return Array.from(document.styleSheets).find((sh) => sh.href === null)
-      })()
-    return sheet ? sheet.insertRule(css, sheet.cssRules.length) >= 0 : false
-  }
-  const cssList = [
-    `.${globalWrapperClassName} { background-color: #fff; }`,
-    // `.${globalWrapperClassName} [data-messy-content] { height: 100%; }`,
-  ]
-  cssList.forEach(insertCss)
-
-  // draggable 속성 해제
-  const unbindDraggable = function (elmnt: HTMLElement): void {
-    const targetElement: HTMLElement = elmnt.querySelector('[' + dataDraggableHandle + ']') ?? elmnt
-    targetElement.onmousedown = undefined
-  }
-  // draggable 속성 연결
-  const bindDraggable = function (elmnt: HTMLElement): void {
-
-    // from https://www.w3schools.com/howto/howto_js_draggable.asp
-    let pos1 = 0
-    let pos2 = 0
-    let pos3 = 0
-    let pos4 = 0
-    
-    const targetElement: HTMLElement = elmnt.querySelector('[' + dataDraggableHandle + ']') ?? elmnt
-    targetElement.onmousedown = dragMouseDown
-
-    function dragMouseDown(e: MouseEvent): void {
-      // e = e || window.event;
-      e.preventDefault()
-      // get the mouse cursor position at startup:
-      pos3 = e.clientX
-      pos4 = e.clientY
-      document.onmouseup = closeDragElement
-      // call a function whenever the cursor moves:
-      document.onmousemove = elementDrag
-    }
-
-    function elementDrag(e: MouseEvent): void {
-      // e = e || window.event;
-      e.preventDefault()
-      // calculate the new cursor position:
-      pos1 = pos3 - e.clientX
-      pos2 = pos4 - e.clientY
-      pos3 = e.clientX
-      pos4 = e.clientY
-      // set the element's new position:
-      // convert bottom to top
-      if (elmnt.style.bottom) {
-        elmnt.style.top = elmnt.offsetTop + 'px'
-        elmnt.style.bottom = ''
-      }
-      // convert right to left
-      if (elmnt.style.right) {
-        elmnt.style.left = elmnt.offsetLeft + 'px'
-        elmnt.style.right = ''
-      }
-      elmnt.style.top = elmnt.offsetTop - pos2 + 'px'
-      elmnt.style.left = elmnt.offsetLeft - pos1 + 'px'
-    }
-
-    function closeDragElement(): void {
-      // stop moving when mouse button is released:
-      document.onmouseup = null
-      document.onmousemove = null
-    }
-  }
 
   // utils
-  const convertTextToElement = function (str: string): Element {
-    const div = document.createElement('div')
-    div.innerHTML = str
-    return div.firstElementChild
-  }
-  const addPopupInfo = function (id: string, el: MessyPopupHTMLElement): void {
-    popupInfo[id] = el
-  }
-  const removePopupInfo = function (id: string): void {
-    delete popupInfo[id]
-  }
-  const show = function (el: MessyPopupHTMLElement): MessyPopupHTMLElement {
-    el.style.visibility = ''
-    return el
-  }
-  const hide = function (el: MessyPopupHTMLElement): MessyPopupHTMLElement {
-    el.style.visibility = 'hidden'
-    return el
-  }
-  const destroy = function (id: string): MessyPopupHTMLElement {
-    const el: MessyPopupHTMLElement = popupInfo[id]
-    removePopupInfo(id)
-    return el.parentNode.removeChild(el)
-  }
-  const setDraggable = function (id: string, set?: boolean): MessyPopupHTMLElement {
-    const unset = set === false
-    const el = popupInfo[id]
-    // if (set) unbindDraggable.call(el)
-    // else bindDraggable.call(el)
-    unset ? unbindDraggable.call(el, el) : bindDraggable.call(el, el)
-    return el
-  }
+  class HTMLElementUtil {
+    convertTextToElement(str: string): Element {
+      const div = document.createElement('div')
+      div.innerHTML = str
+      return div.firstElementChild
+    }
+    show(el: PopupHTMLElement): PopupHTMLElement {
+      el.style.visibility = ''
+      return el
+    }
+    hide(el: PopupHTMLElement): PopupHTMLElement {
+      el.style.visibility = 'hidden'
+      return el
+    }
+    destroy(el: PopupHTMLElement): PopupHTMLElement {
+      return el.parentNode.removeChild(el)
+    }
+    setDraggable(el: PopupHTMLElement, set?: boolean): PopupHTMLElement {
+      const unset = set === false
+      unset ? this.unbindDraggable.call(el, el) : this.bindDraggable.call(el, el)
+      return el
+    }
 
-  const getDefinedValue = <T>(...args: Array<T | undefined>): T | undefined => args.find((arg) => arg !== undefined)
+    
+    // CSS 삽입
+    insertCss(css: string): boolean {
+      // 기존 sheet 사용
+      const sheet: CSSStyleSheet =
+        Array.from(document.styleSheets).find((sh) => sh.href === null) ||
+        (() => {
+          // 등록가능한 sheet가 없는 경우
+          const style = document.createElement('style')
+          style.setAttribute('data-messy-popup', 'true')
+          document.querySelector('head').appendChild(style)
+          return Array.from(document.styleSheets).find((sh) => sh.href === null)
+        })()
+      return sheet ? sheet.insertRule(css, sheet.cssRules.length) >= 0 : false
+    }
+    // draggable 속성 해제
+    unbindDraggable(elmnt: HTMLElement): void {
+      const targetElement: HTMLElement = elmnt.querySelector('[' + dataDraggableHandle + ']') ?? elmnt
+      targetElement.onmousedown = undefined
+    }
+    // draggable 속성 연결
+    bindDraggable(elmnt: HTMLElement): void {
 
-  class _MessyPopup {
-    private _config: MessyPopupDefaultConfig
-    public config: MessyPopupDefaultConfig
+      // from https://www.w3schools.com/howto/howto_js_draggable.asp
+      let pos1 = 0
+      let pos2 = 0
+      let pos3 = 0
+      let pos4 = 0
+      
+      const targetElement: HTMLElement = elmnt.querySelector('[' + dataDraggableHandle + ']') ?? elmnt
+      targetElement.onmousedown = dragMouseDown
+
+      function dragMouseDown(e: MouseEvent): void {
+        // e = e || window.event;
+        e.preventDefault()
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX
+        pos4 = e.clientY
+        document.onmouseup = closeDragElement
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag
+      }
+
+      function elementDrag(e: MouseEvent): void {
+        // e = e || window.event;
+        e.preventDefault()
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX
+        pos2 = pos4 - e.clientY
+        pos3 = e.clientX
+        pos4 = e.clientY
+        // set the element's new position:
+        // convert bottom to top
+        if (elmnt.style.bottom) {
+          elmnt.style.top = elmnt.offsetTop + 'px'
+          elmnt.style.bottom = ''
+        }
+        // convert right to left
+        if (elmnt.style.right) {
+          elmnt.style.left = elmnt.offsetLeft + 'px'
+          elmnt.style.right = ''
+        }
+        elmnt.style.top = elmnt.offsetTop - pos2 + 'px'
+        elmnt.style.left = elmnt.offsetLeft - pos1 + 'px'
+      }
+
+      function closeDragElement(): void {
+        // stop moving when mouse button is released:
+        document.onmouseup = null
+        document.onmousemove = null
+      }
+    }
+  }
+  class MessyPopupInstance implements PopupInstance {
+    public popupInfo: PopupDataInfo
+    private _config: DefaultPopupConfig
+    public instanceConfig: DefaultPopupConfig
+    
+    private htmlUtil: HTMLElementUtil
 
     constructor() {
+      this.htmlUtil = new HTMLElementUtil()
+      this.popupInfo = {}
       this._config = {
         root: 'body',
         wrapper: ((): HTMLElement => document.createElement('div'))(),
@@ -199,17 +136,33 @@
       }
     }
 
+    init(): void {
+      const cssList = [
+        `.${globalWrapperClassName} { background-color: #fff; }`,
+        // `.${globalWrapperClassName} [data-messy-content] { height: 100%; }`,
+      ]
+      cssList.forEach(this.htmlUtil.insertCss)
+    }
+    
+    addPopupInfo(id: string, el: PopupHTMLElement): void {
+      this.popupInfo[id] = el
+    }
+    removePopupInfo(id: string): void {
+      delete this.popupInfo[id]
+    }
+
     setConfig(customConfig: undefined): this
-    setConfig(customConfig: OptionalMessyPopupDefaultConfig): this
-    setConfig(customConfig: OptionalMessyPopupDefaultConfig): this {
+    setConfig(customConfig: OptionalDefaultPopupConfig): this
+    setConfig(customConfig: OptionalDefaultPopupConfig): this {
+      const getDefinedValue = <T>(...args: Array<T | undefined>): T | undefined => args.find((arg) => arg !== undefined)
       // const wrapObj = function(key, value) {
       //   var _o = {}
       //   _o[key] = value
       //   return _o
       // }
       // const wrapObj = (k: string, v: any): object => ({ [k]: v })
-      const defaultConfig: MessyPopupDefaultConfig = this._config
-      const currentConfig: MessyPopupDefaultConfig = {
+      const defaultConfig: DefaultPopupConfig = this._config
+      const currentConfig: DefaultPopupConfig = {
         root: getDefinedValue(customConfig?.root, defaultConfig.root),
         wrapper: getDefinedValue(customConfig?.wrapper, defaultConfig.wrapper),
         global: {
@@ -227,21 +180,21 @@
           },
         },
       }
-      this.config = currentConfig
+      this.instanceConfig = currentConfig
       return this
     }
 
-    createPopup(...popupConfigList: Array<MessyPopupConfig>): this {
-      const config: MessyPopupDefaultConfig = this.config
+    createPopup(...popupConfigList: Array<PopupConfig>): this {
+      const config: DefaultPopupConfig = this.instanceConfig
       const body: Element = document.querySelector(config.root)
 
       popupConfigList
         .filter((item) => item.id)
-        .map((item: MessyPopupConfig): [MessyPopupHTMLElement, MessyPopupConfig] => {
+        .map((item: PopupConfig): [PopupHTMLElement, PopupConfig] => {
           const { id, wrapper, content, style = {} } = item
           const { zIndex: globalZIndex } = config.global
 
-          const div: MessyPopupHTMLElement = <MessyPopupHTMLElement>(wrapper === undefined ? config.wrapper : convertTextToElement(wrapper)).cloneNode(true)
+          const div: PopupHTMLElement = <PopupHTMLElement>(wrapper === undefined ? config.wrapper : this.htmlUtil.convertTextToElement(wrapper)).cloneNode(true)
           div.id = id
           div.classList.add(globalWrapperClassName)
 
@@ -271,16 +224,19 @@
           div.style.visibility = 'hidden'
 
           // 메소드 바인딩
-          div.show = () => show(div)
-          div.hide = () => hide(div)
-          div.destroy = () => destroy(id)
-          div.setDraggable = () => setDraggable(id)
-          div.unsetDraggable = () => setDraggable(id, false)
+          div.show = () => this.htmlUtil.show(div)
+          div.hide = () => this.htmlUtil.hide(div)
+          div.destroy = () => {
+            this.removePopupInfo(id)
+            return this.htmlUtil.destroy(div)
+          }
+          div.setDraggable = () => this.htmlUtil.setDraggable(div)
+          div.unsetDraggable = () => this.htmlUtil.setDraggable(div, false)
 
-          addPopupInfo(id, div)
+          this.addPopupInfo(id, div)
           return [div, item]
         })
-        .map(([popup, item]: [MessyPopupHTMLElement, MessyPopupConfig]): MessyPopupHTMLElement => {
+        .map(([popup, item]: [PopupHTMLElement, PopupConfig]): PopupHTMLElement => {
           const getBooleanFunctionalValue = (...args: Array<(() => boolean) | boolean>) => {
             for (const arg of args) {
               const value = typeof arg === 'function' ? arg() : arg
@@ -307,8 +263,8 @@
         })
       return this
     }
-    getPopup(id: string): MessyPopupHTMLElement {
-      return popupInfo[id]
+    getPopup(id: string): PopupHTMLElement {
+      return this.popupInfo[id]
     }
     show(id: string): this {
       const el = this.getPopup(id)
@@ -326,7 +282,7 @@
       return this
     }
     destroyAll(): this {
-      Object.keys(popupInfo).forEach(this.destroy)
+      Object.keys(this.popupInfo).forEach(this.destroy)
       return this
     }
     setDraggable(id: string): this {
@@ -340,14 +296,14 @@
       return this
     }
     unsetDraggableAll(): this {
-      Object.keys(popupInfo).forEach(this.unsetDraggable)
+      Object.keys(this.popupInfo).forEach(this.unsetDraggable)
       return this
     }
     getPopupCount(): number {
-      return Object.keys(popupInfo).length
+      return Object.keys(this.popupInfo).length
     }
-    forEach(fn: ([id, el]: [string, MessyPopupHTMLElement], i: number, arr: Array<[string, MessyPopupHTMLElement]>) => void): this {
-      Object.entries(popupInfo).forEach(function ([id, el]: [string, MessyPopupHTMLElement], i: number, arr: Array<[string, MessyPopupHTMLElement]>) {
+    forEach(fn: ([id, el]: [string, PopupHTMLElement], i: number, arr: Array<[string, PopupHTMLElement]>) => void): this {
+      Object.entries(this.popupInfo).forEach(function ([id, el]: [string, PopupHTMLElement], i: number, arr: Array<[string, PopupHTMLElement]>) {
         fn.apply(this, [el, id, i, arr])
       })
       return this
@@ -356,8 +312,17 @@
       delete w[vname]
       return this
     }
+
+    
+    // deprecated
+    config(customConfig: undefined): this
+    config(customConfig: OptionalDefaultPopupConfig): this
+    config(customConfig: OptionalDefaultPopupConfig): this {
+      return this.setConfig(customConfig)
+    }
   }
-  const MessyPopup = new _MessyPopup()
+  const MessyPopup = new MessyPopupInstance()
+  MessyPopup.init()
 
   // w && (w[vname] = MessyPopup)
   if (typeof module === 'undefined') {
