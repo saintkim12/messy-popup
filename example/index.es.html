@@ -8,9 +8,8 @@
 </head>
 <body>
   <!-- UMD example -->
-  <script src="../build/messy-popup.umd.js"></script>
-  <script>
-    const MessyPopup = window.MessyPopup
+  <script type="module">
+    import MessyPopup from '../build/messy-popup.es.js'
     MessyPopup.setConfig({
       // wrapper: `
       //   <div>

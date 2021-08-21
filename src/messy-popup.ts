@@ -1,6 +1,3 @@
-// import { DefaultPopupConfig, PopupConfig, PopupDataInfo, PopupHTMLElement, PopupInstance } from './types/index'
-// import { DefaultPopupConfig, PopupConfig, PopupDataInfo, PopupHTMLElement, PopupInstance } from './types/index'
-
 import { DefaultPopupConfig, OptionalDefaultPopupConfig, PopupConfig } from './types/PopupConfig'
 import { PopupHTMLElement } from './types/PopupElement'
 import { PopupDataInfo, PopupInstance } from './types/PopupInstance'

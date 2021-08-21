@@ -1,8 +1,16 @@
 {
   "name": "messy-popup",
+  "files": ["build"],
+  "main": "./build/messy-popup.umd.js",
+  "module": "./build/messy-popup.es.js",
+  "exports": {
+    ".": {
+      "import": "./build/messy-popup.es.js",
+      "require": "./build/messy-popup.umd.js"
+    }
+  },
   "version": "1.0.0",
   "description": "",
-  "main": "messy-popup.js",
   "devDependencies": {
     "@types/node": "^16.4.12",
     "@typescript-eslint/eslint-plugin": "^4.29.2",

@@ -4,6 +4,7 @@ module.exports = {
     'browser': true,
     'es2021': true
   },
+  'ignorePatterns': ['build/*'],
   'extends': [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended'
@@ -18,7 +19,6 @@ module.exports = {
     'eslint-plugin-html'
   ],
   'rules': {
-    '@typescript-eslint/no-explicit-any': 'error',
     'indent': [
       'error',
       2

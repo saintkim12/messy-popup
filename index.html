@@ -8,6 +8,49 @@
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <!-- <script type="module" src="/src/index.ts"></script> -->
+    <script src="../build/messy-popup.umd.js"></script>
+    <script>
+      const MessyPopup = window.MessyPopup
+      MessyPopup.setConfig({
+        // wrapper: `
+        //   <div>
+        //     <div data-messy-content></div>
+        //     <div>
+        //       <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>
+        //     </div>
+        //   </div>
+        // `
+      })
+      MessyPopup.createPopup({
+        id: 'test01',
+        wrapper: `
+          <div>
+            <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->
+              <h2>headerheader</h2>
+            </div>
+            <div data-messy-content></div>
+            <div>
+              <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>
+            </div>
+          </div>
+        `,
+        style: {
+          right: '200px',
+          top: '50px',
+        },
+        draggable: true,
+        content: '<img src="//via.placeholder.com/350x150" />'
+      }, {
+        id: 'test02',
+        style: {
+          right: '200px',
+          top: '350px',
+          width: '200px'
+        },
+        draggable: true,
+        content: '<img src="./Octocat.png" />'
+      })
+    </script>
   </body>
 </html>
