@@ -1,17 +1,24 @@
 {
   "name": "messy-popup",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "messy-popup.js",
   "devDependencies": {
     "@types/node": "^16.4.12",
-    "parcel-bundler": "^1.9.4",
-    "typescript": "^4.3.5"
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-html": "^6.1.2",
+    "typescript": "^4.3.2",
+    "vite": "^2.4.4"
   },
   "scripts": {
-    "build": "parcel build src/messy-popup.ts -d ./build --global MessyPopup --public-url .",
-    "serve": "parcel serve example/example.build.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check-types": "tsc --noemit",
+    "eslint": "eslint",
+    "lint": "npm run eslint && npm run check-types",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
   },
   "repository": {
     "type": "git",
