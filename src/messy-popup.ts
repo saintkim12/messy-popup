@@ -186,8 +186,12 @@ class MessyPopupInstance implements PopupInstance {
       .map((item: PopupConfig): [PopupHTMLElement, PopupConfig] => {
         const { id, wrapper, content, style = {} } = item
         const { zIndex: globalZIndex } = config.global
-
-        const div: PopupHTMLElement = <PopupHTMLElement>(wrapper === undefined ? config.wrapper : this.htmlUtil.convertTextToElement(wrapper))?.cloneNode(true)
+        
+        const div: PopupHTMLElement = <PopupHTMLElement>(((w) => {
+          if (w instanceof HTMLElement) return w
+          else if (typeof w === 'string') return <HTMLElement>this.htmlUtil.convertTextToElement(w)
+          else return <HTMLElement>this._config.wrapper
+        })(wrapper === undefined ? config.wrapper : wrapper)).cloneNode(true)
         div.id = id
         div.classList.add(globalWrapperClassName)
 

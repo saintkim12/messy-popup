@@ -10,7 +10,7 @@ type CommonPopupConfig = {
 // 팝업 디폴트 설정값
 export type DefaultPopupConfig = {
   root: string | undefined
-  wrapper: HTMLElement | undefined
+  wrapper: string | HTMLElement | undefined
   global: DefaultPopupElementConfig
 }
 

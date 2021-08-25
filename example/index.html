@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,31 +9,49 @@
 <body>
   <!-- UMD example -->
   <script src="../build/messy-popup.umd.js"></script>
+  <script src="https://unpkg.com/markdown-it/dist/markdown-it.min.js"></script>
+  <script>
+    const markdownit = window.markdownit
+    // TODO: README.md 불러와 출력하기
+
+  </script>
   <script>
     const MessyPopup = window.MessyPopup
     MessyPopup.setConfig({
-      // wrapper: `
-      //   <div>
-      //     <div data-messy-content></div>
-      //     <div>
-      //       <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>
-      //     </div>
-      //   </div>
-      // `
-    })
-    MessyPopup.createPopup({
-      id: 'test01',
-      wrapper: `
+      wrapper: /* 팝업 내용을 감싸는 DOM element 설정 */
+      /* html */`
+        <dt></dt>
+      `,
+    }).createPopup({
+      id: 'test01', /* 팝업의 id 및 DOM element id 설정 */
+      wrapper: /* 팝업 내용을 감싸는 DOM element 설정 */
+      /* html */`
         <div>
           <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->
-            <h2>headerheader</h2>
+            <h3>헤더를 드래그하면 옴직일 수 있습니다.</h3>
           </div>
-          <div data-messy-content></div>
+          <div data-messy-content> <!-- data-messy-content 속성이 있는 element에 (config.)content 내용이 삽입됨 -->
+            <!-- content 내용이 들어감 -->
+          </div>
           <div>
             <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>
           </div>
         </div>
       `,
+      // or if you cannot use ES6+
+      // wrapper: '\
+      //   <div>\
+      //     <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->\
+      //       <h3>헤더를 드래그하면 옴직일 수 있습니다.</h3>\
+      //     </div>\
+      //     <div data-messy-content> <!-- data-messy-content 속성이 있는 element에 (config.)content 내용이 삽입됨 -->\
+      //       <!-- content 내용이 들어감 -->\
+      //     </div>\
+      //     <div>\
+      //       <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>\
+      //     </div>\
+      //   </div>\
+      // ',
       style: {
         right: '200px',
         top: '50px',
