@@ -131,6 +131,8 @@ class MessyPopupInstance implements PopupInstance {
     const cssList = [
       `.${globalWrapperClassName} { background-color: #fff; }`,
       // `.${globalWrapperClassName} [data-messy-content] { height: 100%; }`,
+      // `.${globalWrapperClassName} [${dataDraggableHandle}] { height: 100%; }`,
+      `[${dataDraggableHandle}] { cursor: move; }`,
     ]
     cssList.forEach(this.htmlUtil.insertCss)
 
@@ -205,8 +207,8 @@ class MessyPopupInstance implements PopupInstance {
         div.dataset[aname] = ''
         // console.log('style', style)
         // div.dataset[aname + 'Id'] = id
-        div.style.top = style?.top?.toString() || ''
-        div.style.left = style?.left?.toString() || ''
+        div.style.top = style?.top?.toString() || '0'
+        div.style.left = style?.left?.toString() || '0'
         div.style.bottom = style?.bottom?.toString() || ''
         div.style.right = style?.right?.toString() || ''
         div.style.position = style?.position || 'absolute'
