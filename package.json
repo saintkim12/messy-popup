@@ -25,7 +25,7 @@
     "eslint": "eslint",
     "lint": "npm run eslint && npm run check-types",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --watch",
     "serve": "vite preview"
   },
   "repository": {
