@@ -1,6 +1,8 @@
 {
   "name": "messy-popup",
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "main": "./build/messy-popup.umd.js",
   "module": "./build/messy-popup.es.js",
   "exports": {
@@ -17,6 +19,7 @@
     "@typescript-eslint/parser": "^4.29.2",
     "eslint": "^7.32.0",
     "eslint-plugin-html": "^6.1.2",
+    "http-server": "^13.0.1",
     "typescript": "^4.3.2",
     "vite": "^2.4.4"
   },
@@ -25,7 +28,9 @@
     "eslint": "eslint",
     "lint": "npm run eslint && npm run check-types",
     "dev": "vite",
-    "build": "tsc && vite build --watch",
+    "build": "tsc && vite build",
+    "watch": "tsc && vite build --watch",
+    "build:test": "http-server .",
     "serve": "vite preview"
   },
   "repository": {

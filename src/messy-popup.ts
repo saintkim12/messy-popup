@@ -118,7 +118,7 @@ class MessyPopupInstance implements PopupInstance {
   public instanceConfig: DefaultPopupConfig | undefined
 
   private htmlUtil: HTMLElementUtil
-
+  
   constructor() {
     this.htmlUtil = new HTMLElementUtil()
     this.popupInfo = {}
@@ -216,10 +216,20 @@ class MessyPopupInstance implements PopupInstance {
         div.dataset[aname] = ''
         // console.log('style', style)
         // div.dataset[aname + 'Id'] = id
-        div.style.top = style?.top?.toString() || '0'
-        div.style.left = style?.left?.toString() || '0'
-        div.style.bottom = style?.bottom?.toString() || ''
-        div.style.right = style?.right?.toString() || ''
+        const [top, bottom, left, right] = [
+          style?.top?.toString() ?? '',
+          style?.bottom?.toString() ?? '',
+          style?.left?.toString() ?? '',
+          style?.right?.toString() ?? '',
+        ]
+        div.style.top = top ?? (bottom ? '' :'0') /* bottom이 없다면 top을 0으로 */
+        div.style.bottom = bottom
+        div.style.left = left ?? (right ? '' :'0') /* right가 없다면 left를 0으로 */
+        div.style.right = right
+        // div.style.top = top
+        // div.style.bottom = bottom
+        // div.style.left = left
+        // div.style.right = right
         div.style.position = style?.position || 'absolute'
         div.style.zIndex = ((zIndex) => {
           switch (typeof zIndex) {
@@ -230,13 +240,14 @@ class MessyPopupInstance implements PopupInstance {
           default:
             return zIndex
           }
-        })(style?.zIndex || style?.['z-index'] || globalZIndex) || defaultZIndex
+        })(style?.zIndex || style?.['z-index'] || globalZIndex) || `${defaultZIndex}`
 
         // FIXME: 테스트, wrapper의 최상위 자식 노드로 고정
         const child: HTMLElement | null = div.querySelector(`[${contentAttrName}] > *:first-child`)
+        const [width, height] = [style?.width?.toString() || '', style?.height?.toString() || '']
         if (child) {
-          child.style.width = style?.width?.toString() || ''
-          child.style.height = style?.height?.toString() || ''
+          child.style.width = width
+          child.style.height = height
         }
 
         // 초기 생성시에는 안보이도록
@@ -291,32 +302,32 @@ class MessyPopupInstance implements PopupInstance {
     return this.popupInfo[id]
   }
   show(id: string): this {
-    const el = this.getPopup(id)
+    const el = this.getPopup.call(this, id)
     el.show()
     return this
   }
   hide(id: string): this {
-    const el = this.getPopup(id)
+    const el = this.getPopup.call(this, id)
     el.hide()
     return this
   }
   destroy(id: string): this {
-    const el = this.getPopup(id)
+    const el = this.getPopup.call(this, id)
     el.destroy()
     return this
   }
   destroyAll(): this {
-    Object.keys(this.popupInfo).forEach(this.destroy)
+    Object.keys(this.popupInfo).forEach((id) => this.destroy.call(this, id))
     return this
   }
   setDraggable(id: string): this {
-    const el = this.getPopup(id)
+    const el = this.getPopup.call(this, id)
     
     el.setDraggable()
     return this
   }
   unsetDraggable(id: string): this {
-    const el = this.getPopup(id)
+    const el = this.getPopup.call(this, id)
     
     el.unsetDraggable()
     return this
@@ -352,4 +363,5 @@ class MessyPopupInstance implements PopupInstance {
 const _MessyPopup = new MessyPopupInstance()
 const MessyPopup = _MessyPopup.init()
 
+export const Instance = MessyPopupInstance
 export default MessyPopup
