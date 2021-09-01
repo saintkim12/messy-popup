@@ -27,69 +27,120 @@
   </script>
   <script>
   var MessyPopup = window.MessyPopup
+
   MessyPopup
-    .setConfig({/* 팝업 공통 설정 정의 */})
     /* 팝업을 생성/초기화 */
     .createPopup({
-      id: 'my-messy-popup',
-      draggable: true,
-      content: 'hello'
+      id: 'my-text-popup', /* 팝업의 id 및 DOM element id 설정 */
+      content: /* 텍스트, html 텍스트, html element 지정 가능 */
+        '************************************<br>\
+         ************** hello ***************<br>\
+         ************************************',
+      style: {/* 컨텐츠를 감싼 div의 style을 지정 */
+        top: '50px',
+        right: '50px',
+      }
     })
-    .destroyAll()
+    .createPopup({
+      id: 'my-image-popup', /* 팝업의 id 및 DOM element id 설정 */
+      content: /* 텍스트, html 텍스트, html element 지정 가능 */
+        '<img src="https://avatars.githubusercontent.com/u/45479131?v=4" />',
+      style: {/* 컨텐츠를 감싼 div의 style을 지정 */
+        top: '150px',
+        right: '50px',
+        width: '250px',
+        height: '250px',
+      }
+    })
+    // .destroyAll()
     // .createPopup({
     //   id: 'my-image-messy-popup',
     //   content: 'hello'
     // })
-  </script>
-  <script>
-    var MessyPopup = window.MessyPopup
-    MessyPopup.setConfig({
-    }).createPopup({
-      id: 'test01', /* 팝업의 id 및 DOM element id 설정 */
-      wrapper: /* 팝업 내용을 감싸는 DOM element 설정 */
-      /* html */`
-        <div>
-          <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->
-            <h3>헤더를 드래그하면 움직일 수 있습니다.</h3>
-          </div>
-          <div data-messy-content> <!-- data-messy-content 속성이 있는 element에 (config.)content 내용이 삽입됨 -->
-            <!-- content 내용이 들어감 -->
-          </div>
-          <div>
-            <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>
-          </div>
-        </div>
-      `,
-      // or if you cannot use ES6+
-      // wrapper: '\
-      //   <div>\
-      //     <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->\
-      //       <h3>헤더를 드래그하면 옴직일 수 있습니다.</h3>\
-      //     </div>\
-      //     <div data-messy-content> <!-- data-messy-content 속성이 있는 element에 (config.)content 내용이 삽입됨 -->\
-      //       <!-- content 내용이 들어감 -->\
-      //     </div>\
-      //     <div>\
-      //       <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>\
-      //     </div>\
-      //   </div>\
-      // ',
-      style: {
-        right: '200px',
-        top: '50px',
-      },
-      // draggable: true,
-      content: '<img src="//via.placeholder.com/350x150" />'
-    }, {
-      id: 'test02',
-      style: {
-        right: '200px',
-        top: '350px',
-        width: '200px'
-      },
-      // draggable: true,
-      content: '<img src="./Octocat.png" />'
+  var mp = window.MessyPopup.getNewInstance()
+  mp
+    .setConfig({/* 팝업 공통 설정 정의 */
+      wrapper: 
+        '<div>\
+            <div class="popup-header" data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->\
+              <h3>Draggable Header</h3>\
+            </div>\
+            <div data-messy-content> <!-- data-messy-content 속성이 있는 element에 (config.)content 내용이 삽입됨 -->\
+              <!-- content 내용이 들어감 -->\
+            </div>\
+          </div>'
     })
+    /* 팝업을 생성/초기화 */
+    .createPopup({
+      id: 'my-text-popup', /* 팝업의 id 및 DOM element id 설정 */
+      content: /* 텍스트, html 텍스트, html element 지정 가능 */
+        '************************************<br>\
+        ************** hello ***************<br>\
+        ************************************',
+      style: {/* 컨텐츠를 감싼 div의 style을 지정 */
+        top: '50px',
+        right: '350px',
+      }
+    })
+    .createPopup({
+      id: 'my-image-popup', /* 팝업의 id 및 DOM element id 설정 */
+      content: /* 텍스트, html 텍스트, html element 지정 가능 */
+        '<img src="https://avatars.githubusercontent.com/u/45479131?v=4" />',
+      style: {/* 컨텐츠를 감싼 div의 style을 지정 */
+        top: '200px',
+        right: '350px',
+        width: '250px',
+        height: '250px',
+      }
+    })
+    // var MessyPopup = window.MessyPopup
+    // MessyPopup.setConfig({
+    // }).createPopup({
+    //   id: 'test01', /* 팝업의 id 및 DOM element id 설정 */
+    //   wrapper: /* 팝업 내용을 감싸는 DOM element 설정 */
+    //   /* html */`
+    //     <div>
+    //       <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->
+    //         <h3>헤더를 드래그하면 움직일 수 있습니다.</h3>
+    //       </div>
+    //       <div data-messy-content> <!-- data-messy-content 속성이 있는 element에 (config.)content 내용이 삽입됨 -->
+    //         <!-- content 내용이 들어감 -->
+    //       </div>
+    //       <div>
+    //         <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>
+    //       </div>
+    //     </div>
+    //   `,
+    //   // or if you cannot use ES6+
+    //   // wrapper: '\
+    //   //   <div>\
+    //   //     <div data-messy-draggable-handle><!-- draggable handle이 있는 경우 드래그 대상이 해당 엘리먼트로 고정 -->\
+    //   //       <h3>헤더를 드래그하면 옴직일 수 있습니다.</h3>\
+    //   //     </div>\
+    //   //     <div data-messy-content> <!-- data-messy-content 속성이 있는 element에 (config.)content 내용이 삽입됨 -->\
+    //   //       <!-- content 내용이 들어감 -->\
+    //   //     </div>\
+    //   //     <div>\
+    //   //       <input type="checkbox" /><span>오늘 하루는 이 창을 열지 않음</span>\
+    //   //     </div>\
+    //   //   </div>\
+    //   // ',
+    //   style: {
+    //     right: '200px',
+    //     top: '50px',
+    //   },
+    //   // draggable: true,
+    //   content: '<img src="//via.placeholder.com/350x150" />'
+    // }, {
+    //   id: 'test02',
+    //   style: {
+    //     right: '200px',
+    //     top: '350px',
+    //     width: '200px'
+    //   },
+    //   // draggable: true,
+    //   content: '<img src="./Octocat.png" />'
+    // })
   </script>
 </body>
 </html>

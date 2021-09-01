@@ -128,12 +128,13 @@ class MessyPopupInstance implements PopupInstance {
       wrapper: ((): HTMLElement => document.createElement('div'))(),
       global: {
         // hide: true,
-        draggable: false,
+        draggable: true,
         style: {
           zIndex: 1000,
         },
       },
     }
+    this.setConfig() // set config for init
   }
 
   init(): this {
@@ -190,7 +191,7 @@ class MessyPopupInstance implements PopupInstance {
 
   createPopup(...popupConfigList: Array<PopupConfig>): this {
     const config: DefaultPopupConfig = <DefaultPopupConfig>this.instanceConfig
-    const body: Element = <Element>document.querySelector(config.root ?? '')
+    const body: Element = <Element>document.querySelector(config?.root ?? this._config.root)
 
     popupConfigList
       .filter((item) => item.id)
@@ -290,7 +291,6 @@ class MessyPopupInstance implements PopupInstance {
 
         body.appendChild(popup)
         if (draggable) {
-          console.log('popup', popup, draggable, popup.setDraggable)
           popup.setDraggable()
         }
         if (show) popup.show()
@@ -345,6 +345,9 @@ class MessyPopupInstance implements PopupInstance {
       return fn.apply(this, [[id, el], i, arr])
     })
     return this
+  }
+  getNewInstance(): MessyPopupInstance {
+    return new MessyPopupInstance()
   }
   
   // deprecated

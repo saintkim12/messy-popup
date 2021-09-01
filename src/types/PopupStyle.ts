@@ -1,3 +1,7 @@
+
+/**
+ * @see CSSStyleDeclaration
+ */
 export type PopupStyle = {
   top?: string | number
   left?: string | number
